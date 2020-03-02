@@ -6,17 +6,12 @@
 */
 #include "DHT12.h"
 
-DHT12::DHT12(uint8_t scale,uint8_t dht12_id, uint8_t bmp280_id)
+DHT12::DHT12(uint8_t scale,uint8_t dht12_id)
 {
   if (dht12_id == 0 || dht12_id > 126) {
     _dht12_id = 0x5c;
   } else {
     _dht12_id = dht12_id;
-  }
-  if (bmp280_id == 0 || bmp280_id > 126) {
-    _bmp280_id = 0x76;
-  } else {
-    _bmp280_id = bmp280_id;
   }
   if (scale == 0 || scale > 3) {
     _scale = CELSIUS;
@@ -73,7 +68,7 @@ float DHT12::readTemperature(uint8_t scale)
 float DHT12::readHumidity()
 {
   float resultado;
-  uint8_t error=read(_bmp280_id);
+  uint8_t error=read(_dht12_id);
 
   Serial.println("---------- DHT12::readHumidity ----------");
   Serial.print("error = "); Serial.println(error);
