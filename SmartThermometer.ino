@@ -54,12 +54,12 @@ char *terrariumName[] = {
 PaHUB pahub;
 
 struct Sensor sensors[] = {
-  {0, DHT12(CELSIUS, ENV_I2C_ADDRESS), "Left"},
-  {1, DHT12(CELSIUS, ENV_I2C_ADDRESS), "Hotspot"},
-  {2, DHT12(CELSIUS, ENV_I2C_ADDRESS), "Right"},
-  {3, DHT12(CELSIUS, ENV_I2C_ADDRESS), "Left"},
-  {4, DHT12(CELSIUS, ENV_I2C_ADDRESS), "Hotspot"},
-  {5, DHT12(CELSIUS, ENV_I2C_ADDRESS), "Right"}
+  {0, DHT12(), "Left"},
+  {1, DHT12(), "Hotspot"},
+  {2, DHT12(), "Right"},
+  {3, DHT12(), "Left"},
+  {4, DHT12(), "Hotspot"},
+  {5, DHT12(), "Right"}
 };
 
 int nextDrawTime = 0;
