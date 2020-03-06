@@ -16,6 +16,7 @@ limitations under the License.
 
 #include <M5ez.h>
 #include <Wire.h> //The DHT12 uses I2C comunication.
+#include <HTTPClient.h>
 #include "DHT12.h"
 #include "PaHUB.h"
 
@@ -63,9 +64,8 @@ struct Sensor sensors[] = {
 };
 
 int nextDrawTime = 0;
-int updateFrequencySeconds = 30;
-long updateFrequency = updateFrequencySeconds * 1000;
-
+int uiUpdateFrequencySeconds = 30;
+long uiUpdateFrequency = uiUpdateFrequencySeconds * 1000;
 
 // Initialization
 void setup() {
@@ -78,9 +78,10 @@ void loop() {
   dispatchButtonPresses();
 
   if (nextDrawTime < millis()) {
-    nextDrawTime = millis() + updateFrequency;
+    nextDrawTime = millis() + uiUpdateFrequency;
 
     showNextSensor();
+    uploadSensorValues();
   }
 }
 
@@ -91,6 +92,7 @@ void dispatchButtonPresses() {
     showSettings();
     showSensor();
   } else if (btnPressed == "Next") {
+    nextDrawTime = millis() + uiUpdateFrequency;
     showNextSensor();
   }
 }
@@ -178,6 +180,12 @@ struct SensorValues readSensor(int channel) {
   Serial.println(" ---------- readSensor() ----------");
 
   return sensorValues;
+}
+
+void uploadSensorValues() {
+  for (int channel = 0; channel < PaHUB_MAX_CHANNELS; channel++) {
+    struct SensorValues sensorValues = readSensor(channel);
+  }
 }
 
 void alertTone() {
