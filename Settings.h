@@ -14,22 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Application.h"
-#include "Settings.h"
+#ifndef __SETTINGS_H__
+#define __SETTINGS_H__
 
-Settings settings;
-Application app;
+#include <Preferences.h>
 
-//
-// ----- SETUP ----------------------------------------------------------------
-//
-void setup() {
-  app.setup();
-}
+// This class provides access to the settings
+class Settings {
+  public:
+    Settings();
 
-//
-// ----- LOOP -----------------------------------------------------------------
-//
-void loop() {
-  app.loop();
-}
+    static Settings * shared();
+
+    bool isConfigured();
+    void setConfigured(bool configured);
+
+  private:
+    static Settings * _shared;
+
+    Preferences   _preferences;
+    bool     * _isConfigured;
+};
+
+#endif

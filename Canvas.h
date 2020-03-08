@@ -14,22 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Application.h"
-#include "Settings.h"
+#ifndef __CANVAS_H__
+#define __CANVAS_H__
 
-Settings settings;
-Application app;
+class Canvas {
+    public:
+        Canvas() {}
 
-//
-// ----- SETUP ----------------------------------------------------------------
-//
-void setup() {
-  app.setup();
-}
+        // Completely draws the whole canves
+        virtual void draw() = 0;
 
-//
-// ----- LOOP -----------------------------------------------------------------
-//
-void loop() {
-  app.loop();
-}
+        // update the canvas
+        virtual void update() = 0;
+
+        // handle button presses etc.
+        virtual void loop() = 0;
+};
+
+#endif

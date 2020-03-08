@@ -14,22 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Application.h"
-#include "Settings.h"
+#ifndef __CONSTANTS_H__
+#define __CONSTANTS_H__
 
-Settings settings;
-Application app;
+#define APPLICATION_NAME     "SmartThermometer"
 
-//
-// ----- SETUP ----------------------------------------------------------------
-//
-void setup() {
-  app.setup();
-}
-
-//
-// ----- LOOP -----------------------------------------------------------------
-//
-void loop() {
-  app.loop();
-}
+#endif

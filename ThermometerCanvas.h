@@ -14,22 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Application.h"
-#include "Settings.h"
+#ifndef __THERMOMETERCANVAS_H__
+#define __THERMOMETERCANVAS_H__
 
-Settings settings;
-Application app;
+#include "Canvas.h"
 
-//
-// ----- SETUP ----------------------------------------------------------------
-//
-void setup() {
-  app.setup();
-}
+class ThermometerCanvas: public Canvas {
+    public:
+        ThermometerCanvas() : Canvas() {}
 
-//
-// ----- LOOP -----------------------------------------------------------------
-//
-void loop() {
-  app.loop();
-}
+        // Completely draws the whole canves
+        virtual void draw();
+
+        // update the canvas
+        virtual void update();
+
+        // handle button presses etc.
+        virtual void loop();
+};
+
+#endif

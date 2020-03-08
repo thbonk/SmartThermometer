@@ -14,22 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Application.h"
-#include "Settings.h"
+#include "SettingsMenu.h"
 
-Settings settings;
-Application app;
-
-//
-// ----- SETUP ----------------------------------------------------------------
-//
-void setup() {
-  app.setup();
+SettingsMenu::SettingsMenu() : _settingsMenu("Preferences") {
+    _settingsMenu.txtSmall();
+    _settingsMenu.addItem("SmartThermometer Preferences", [](){});
+    _settingsMenu.addItem("System Settings", ez.settings.menu);
+    _settingsMenu.buttons("up#Back#select##down#");
 }
 
-//
-// ----- LOOP -----------------------------------------------------------------
-//
-void loop() {
-  app.loop();
+void SettingsMenu::run() {
+    _settingsMenu.run();
 }

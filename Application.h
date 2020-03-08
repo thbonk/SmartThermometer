@@ -14,22 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Application.h"
-#include "Settings.h"
+#ifndef __APPLICATION_H__
+#define __APPLICATION_H__
 
-Settings settings;
-Application app;
+#include "Canvas.h"
 
-//
-// ----- SETUP ----------------------------------------------------------------
-//
-void setup() {
-  app.setup();
-}
+class Application {
+    public:
+        Application();
 
-//
-// ----- LOOP -----------------------------------------------------------------
-//
-void loop() {
-  app.loop();
-}
+        static Application * shared();
+
+        void setup();
+        void loop();
+
+        void showCanvas(Canvas * canvas);
+
+    private:
+        static Application * _shared;
+
+        Canvas   * _currentCanvas;
+};
+
+#endif

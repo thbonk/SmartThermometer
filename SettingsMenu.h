@@ -14,22 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "Application.h"
-#include "Settings.h"
+#ifndef __SETTINGSMENU_H__
+#define __SETTINGSMENU_H__
 
-Settings settings;
-Application app;
+#include <M5ez.h>
 
-//
-// ----- SETUP ----------------------------------------------------------------
-//
-void setup() {
-  app.setup();
-}
+class SettingsMenu {
+    public:
+        SettingsMenu();
 
-//
-// ----- LOOP -----------------------------------------------------------------
-//
-void loop() {
-  app.loop();
-}
+        void run();
+
+    private:
+        ezMenu _settingsMenu;
+};
+
+#endif
