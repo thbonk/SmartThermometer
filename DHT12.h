@@ -17,8 +17,8 @@ class DHT12
 {
   public:
     DHT12(uint8_t scale=0,uint8_t dht12_id=0);
-    float readTemperature(uint8_t scale=0);
-    float readHumidity();
+    float readTemperature(uint8_t scale=0, uint8_t * error = NULL);
+    float readHumidity(uint8_t * error = NULL);
   private:
     uint8_t read(uint8_t address);
     uint8_t datos[5];

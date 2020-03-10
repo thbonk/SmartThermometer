@@ -42,15 +42,22 @@ uint8_t DHT12::read(uint8_t address)
   return 0;
 }
 
-float DHT12::readTemperature(uint8_t scale)
+float DHT12::readTemperature(uint8_t scale, uint8_t * error)
 {
   float resultado=0;
-  uint8_t error = read(_dht12_id);
+  uint8_t err = read(_dht12_id);
 
   Serial.println("---------- DHT12::readTemperature ----------");
-  Serial.print("error = "); Serial.println(error);
-  if (error!=0) return (float)error/100;
-  if (scale==0) scale=_scale;
+  Serial.print("error = "); Serial.println(err);
+  if (err != 0) {
+    if (error) {
+      *error = err;
+    }
+    return (float)err/100;
+  }
+  if (scale == 0) {
+    scale = _scale;
+  }
   switch(scale) {
     case CELSIUS:
       resultado=(datos[2]+(float)datos[3]/10);
@@ -62,18 +69,33 @@ float DHT12::readTemperature(uint8_t scale)
       resultado=(datos[2]+(float)datos[3]/10)+273.15;
       break;
   };
+
+  if (error) {
+    *error = err;
+  }
+
   return resultado;
 }
 
-float DHT12::readHumidity()
+float DHT12::readHumidity(uint8_t * error)
 {
   float resultado;
-  uint8_t error=read(_dht12_id);
+  uint8_t err = read(_dht12_id);
 
   Serial.println("---------- DHT12::readHumidity ----------");
-  Serial.print("error = "); Serial.println(error);
+  Serial.print("error = "); Serial.println(err);
   
-  if (error!=0) return (float)error/100;
+  if (err != 0) {
+    if (error) {
+      *error = err;
+    }
+    return (float)err/100;
+  }
   resultado=(datos[0]+(float)datos[1]/10);
+
+  if (error) {
+      *error = err;
+    }
+
   return resultado;
 }

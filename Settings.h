@@ -26,14 +26,20 @@ class Settings {
 
     static Settings * shared();
 
+    void invalidate();
+
     bool isConfigured();
     void setConfigured(bool configured);
+
+    uint8_t getUpdateFrequency();
+    void    setUpdateFrequency(uint8_t frequency);
 
   private:
     static Settings * _shared;
 
     Preferences   _preferences;
-    bool     * _isConfigured;
+    bool        * _isConfigured;
+    uint8_t     * _updateFreqency; 
 };
 
 #endif

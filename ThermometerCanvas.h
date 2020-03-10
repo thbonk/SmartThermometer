@@ -17,11 +17,13 @@ limitations under the License.
 #ifndef __THERMOMETERCANVAS_H__
 #define __THERMOMETERCANVAS_H__
 
+#include <M5Stack.h>
 #include "Canvas.h"
+#include "SensorList.h"
 
 class ThermometerCanvas: public Canvas {
     public:
-        ThermometerCanvas() : Canvas() {}
+        ThermometerCanvas();
 
         // Completely draws the whole canves
         virtual void draw();
@@ -31,6 +33,18 @@ class ThermometerCanvas: public Canvas {
 
         // handle button presses etc.
         virtual void loop();
+
+    private:
+        void showPreviousSensor();
+        void showNextSensor();
+        void showSensor();
+
+        unsigned long   _nextDrawTime;
+        int16_t         _currentSensor;
+        SensorList      _sensors;
+
+        static int      _temperatureTextWidth;
+        static int      _humidityTextWidth;
 };
 
 #endif
