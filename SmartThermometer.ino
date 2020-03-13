@@ -16,9 +16,11 @@ limitations under the License.
 
 #include "Application.h"
 #include "Settings.h"
+#include "RestService.h"
 
-Settings settings;
 Application app;
+Settings settings;
+RestService restService;
 
 //
 // ----- SETUP ----------------------------------------------------------------
@@ -32,4 +34,5 @@ void setup() {
 //
 void loop() {
   app.loop();
+  restService.loop();
 }

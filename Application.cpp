@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include <M5Stack.h>
 #include <M5ez.h>
 #include <Wire.h>
 #include "Application.h"
@@ -35,6 +36,8 @@ void Application::setup() {
     ez.begin();
     Wire.begin();
 
+    _sensors = new SensorList();
+
     if (!Settings::shared()->isConfigured()) {
         SettingsMenu settingsMenu;
 
@@ -43,6 +46,10 @@ void Application::setup() {
     }
 
     showCanvas(new ThermometerCanvas());
+}
+
+Application::~Application() {
+    delete _sensors;
 }
 
 void Application::loop() {

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 #include <M5ez.h>
+#include "Application.h"
 #include "Settings.h"
 #include "SettingsMenu.h"
 #include "ThermometerCanvas.h"
@@ -32,7 +33,7 @@ int ThermometerCanvas::_temperatureTextWidth = textWidth("99.9'C");
 int ThermometerCanvas::_humidityTextWidth    = textWidth("100%%");
 
 ThermometerCanvas::ThermometerCanvas() 
-    : Canvas(), _nextDrawTime(0), _currentSensor(-1), _sensors() {
+    : Canvas(), _nextDrawTime(0), _currentSensor(-1) {
 
     Serial.print("_temperatureTextWidth = "); Serial.println(_temperatureTextWidth);
     Serial.print("_humidityTextWidth = "); Serial.println(_humidityTextWidth);
@@ -75,7 +76,7 @@ void ThermometerCanvas::showPreviousSensor() {
     _currentSensor--;
 
     if (_currentSensor < 0) {
-        _currentSensor = _sensors.count() - 1;
+        _currentSensor = Application::shared()->getSensors()->count() - 1;
     }
 
     showSensor();
@@ -86,7 +87,7 @@ void ThermometerCanvas::showNextSensor() {
 
     _currentSensor++;
 
-    if (_currentSensor >= _sensors.count()) {
+    if (_currentSensor >= Application::shared()->getSensors()->count()) {
         _currentSensor = 0;
     }
 
@@ -95,7 +96,7 @@ void ThermometerCanvas::showNextSensor() {
 
 void ThermometerCanvas::showSensor() {
     char buffer[50];
-    struct SensorValues sensorValues = _sensors.read(_currentSensor);
+    struct SensorValues sensorValues = Application::shared()->getSensors()->read(_currentSensor);
 
     ez.canvas.reset();
 
@@ -104,7 +105,7 @@ void ThermometerCanvas::showSensor() {
     Serial.print("Current Sensor: "); Serial.println(_currentSensor);
     Serial.print("Canvas Width: "); Serial.println(ez.canvas.width());
 
-    ez.header.show(_sensors.getSensorName(_currentSensor));
+    ez.header.show(Application::shared()->getSensors()->getSensorName(_currentSensor));
 
     ez.canvas.clear();
     ez.canvas.font(&FreeMonoBold24pt7b);

@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <M5Stack.h>
 #include "Canvas.h"
-#include "SensorList.h"
 
 class ThermometerCanvas: public Canvas {
     public:
@@ -41,7 +40,6 @@ class ThermometerCanvas: public Canvas {
 
         unsigned long   _nextDrawTime;
         int16_t         _currentSensor;
-        SensorList      _sensors;
 
         static int      _temperatureTextWidth;
         static int      _humidityTextWidth;

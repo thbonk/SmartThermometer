@@ -17,11 +17,14 @@ limitations under the License.
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
 
+
+#include "SensorList.h"
 #include "Canvas.h"
 
 class Application {
     public:
         Application();
+        ~Application();
 
         static Application * shared();
 
@@ -30,10 +33,15 @@ class Application {
 
         void showCanvas(Canvas * canvas);
 
+        SensorList * getSensors() {
+          return _sensors;
+        }
+
     private:
         static Application * _shared;
 
-        Canvas   * _currentCanvas;
+        SensorList    * _sensors;
+        Canvas        * _currentCanvas;
 };
 
 #endif

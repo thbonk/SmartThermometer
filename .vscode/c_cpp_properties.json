@@ -3,9 +3,11 @@
         {
             "name": "Mac",
             "includePath": [
+                "/Users/thomas/Library/Arduino15/packages/esp32/hardware/esp32/1.0.4/libraries/ESPmDNS/src",
                 "/Users/thomas/Library/Arduino15/packages/esp32/hardware/esp32/1.0.4/libraries/DNSServer/src",
                 "/Users/thomas/Library/Arduino15/packages/esp32/tools/**",
-                "/Users/thomas/Library/Arduino15/packages/esp32/hardware/esp32/1.0.4/**"
+                "/Users/thomas/Library/Arduino15/packages/esp32/hardware/esp32/1.0.4/**",
+                "/Users/thomas/Library/Arduino15/packages/esp32/hardware/esp32/1.0.4/**/src/**"
             ],
             "forcedInclude": [],
             "macFrameworkPath": [

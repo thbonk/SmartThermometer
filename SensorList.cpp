@@ -14,29 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <vector>
-#include <Arduino_JSON.h>
 #include "SensorList.h"
 
 #define PaHub_I2C_ADDRESS  0x70
 #define ENV_I2C_ADDRESS    0x5C
 
-Sensor::Sensor(PaHUB * pahub, uint8_t channel, char * name, char * url)
-    : _pahub(pahub), _channel(channel), _name(NULL), _url(NULL), _dht12() {
+Sensor::Sensor(PaHUB * pahub, uint8_t channel, char * name)
+    : _pahub(pahub), _channel(channel), _name(NULL), _dht12() {
 
-    _name = (char *)malloc(strlen(name) + 1);
-    strcpy(_name, name);
-
-    if (url) {
-        _url = (char *)malloc(strlen(url) + 1);
-        strcpy(_url, url);
+    if (name) {
+        _name = (char *)malloc(strlen(name) + 1);
+        strcpy(_name, name);
     }
 }
 
 Sensor::~Sensor() {
-    free(_name);
-    if (_url) {
-        free(_url);
+    if (_name) {
+        free(_name);
     }
 }
 
@@ -54,6 +48,15 @@ const char * Sensor::getName() {
     return _name;
 }
 
+void Sensor::setName(const char * name) {
+    if (_name) {
+        free(_name);
+    }
+
+    _name = (char *)malloc(strlen(name) + 1);
+    strcpy(_name, name);
+}
+
 SensorList::SensorList() : _pahub(PaHub_I2C_ADDRESS), _sensors() {
     probeSensors();
 }
@@ -68,7 +71,7 @@ SensorList::~SensorList() {
     }
 }
 
-int SensorList::count() {
+const int SensorList::count() {
     return _sensors.size();
 }
 
@@ -81,9 +84,7 @@ const char * SensorList::getSensorName(int sensorNum) {
 }
 
 Sensor * SensorList::getSensor(int index) {
-    std::vector<Sensor *> vect(_sensors.begin(), _sensors.end());
-
-    return vect.at(index);
+    return _sensors.at(index);
 }
 
 void SensorList::probeSensors() {

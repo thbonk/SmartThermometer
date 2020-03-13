@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef __SENSORLIST_H__
 #define __SENSORLIST_H__
 
-#include <list>
+#include <vector>
 #include "PaHUB.h"
 #include "DHT12.h"
 
@@ -33,16 +33,16 @@ class Sensor {
         ~Sensor();
 
     protected:
-        Sensor(PaHUB * pahub, uint8_t channel, char * name, char * url = NULL);
+        Sensor(PaHUB * pahub, uint8_t channel, char * name);
 
         struct SensorValues read();
         const char * getName();
+        void         setName(const char * name);
 
     private:
         PaHUB   * _pahub;
         uint8_t   _channel;
         char    * _name;
-        char    * _url;
         DHT12     _dht12;
 };
 
@@ -51,7 +51,7 @@ class SensorList {
         SensorList();
         ~SensorList();
 
-        int count();
+        const int count();
 
         struct SensorValues read(int sensorNum);
 
@@ -61,8 +61,8 @@ class SensorList {
         void     probeSensors();
         Sensor * getSensor(int index);
 
-        std::list<Sensor *> _sensors;
-        PaHUB              _pahub;
+        std::vector<Sensor *> _sensors;
+        PaHUB                 _pahub;
 };
 
 #endif
