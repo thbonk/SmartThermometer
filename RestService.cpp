@@ -25,12 +25,14 @@ limitations under the License.
 #include "RequestHandlers/SensorsRequestHandler.h"
 #include "RequestHandlers/SensorCountRequestHandler.h"
 #include "RequestHandlers/SensorRequestHandler.h"
+#include "RequestHandlers/SettingsRequestHandler.h"
 
 RestService * RestService::_shared = NULL;
 
 SensorsRequestHandler sensorsRequestHandler;
 SensorCountRequestHandler sensorCountRequestHandler;
 SensorRequestHandler sensorRequestHandler;
+SettingsRequestHandler settingsRequestHandler;
 
 RestService::RestService() : _status(CREATED), _server(80) {
     _shared = this;
@@ -72,12 +74,13 @@ void RestService::initializeService() {
     _server.addHandler(&sensorsRequestHandler);
     _server.addHandler(&sensorCountRequestHandler);
     _server.addHandler(&sensorRequestHandler);
+    _server.addHandler(&settingsRequestHandler);
 
     _server.begin();    
     Serial.printf("HTTP server started on %s", WiFi.localIP());
 
     // Add service to MDNS-SD
-    MDNS.addService("http", "tcp", 80);
+    MDNS.addService("smrtthrm", "tcp", 80);
     _status = STARTED;
 
     vTaskDelete(NULL);

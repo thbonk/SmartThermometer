@@ -37,7 +37,7 @@ class PathArgsRequestHandler : public RequestHandler {
         }
 
         bool canHandle(HTTPMethod requestMethod, String requestUri) override  {
-            if (_method != HTTP_ANY && _method != requestMethod)
+            if (_method != HTTP_ANY && (_method & requestMethod) != requestMethod)
                 return false;
 
             if (_uri == requestUri)

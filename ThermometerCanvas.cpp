@@ -71,7 +71,7 @@ void ThermometerCanvas::loop(){
 }
 
 void ThermometerCanvas::showPreviousSensor() {
-    _nextDrawTime = millis() + (uint64_t)Settings::shared()->getUpdateFrequency() * 1000;
+    _nextDrawTime = millis() + (uint64_t)Settings::shared()->getUiUpdateFrequency() * 1000;
 
     _currentSensor--;
 
@@ -83,7 +83,7 @@ void ThermometerCanvas::showPreviousSensor() {
 }
 
 void ThermometerCanvas::showNextSensor() {
-    _nextDrawTime = millis() + (uint64_t)Settings::shared()->getUpdateFrequency() * 1000;
+    _nextDrawTime = millis() + (uint64_t)Settings::shared()->getUiUpdateFrequency() * 1000;
 
     _currentSensor++;
 

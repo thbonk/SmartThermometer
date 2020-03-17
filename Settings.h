@@ -31,14 +31,24 @@ class Settings {
     bool isConfigured();
     void setConfigured(bool configured);
 
-    uint8_t getUpdateFrequency();
-    void    setUpdateFrequency(uint8_t frequency);
+    String & getHostname();
+    void     setHostname(String & newHostname);
+
+    String getSsid();
+    void   setSsid(String & ssid);
+
+    String getPsk();
+    void   setPsk(String & psk);
+
+    uint8_t getUiUpdateFrequency();
+    void    setUiUpdateFrequency(uint8_t frequency);
 
   private:
     static Settings * _shared;
 
     Preferences   _preferences;
     bool        * _isConfigured;
+    String      * _hostname;
     uint8_t     * _updateFreqency; 
 };
 
