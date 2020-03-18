@@ -19,7 +19,6 @@ limitations under the License.
 #include <Wire.h>
 #include "Application.h"
 #include "Settings.h"
-#include "SettingsMenu.h"
 #include "ThermometerCanvas.h"
 
 Application * Application::_shared = NULL;
@@ -39,9 +38,7 @@ void Application::setup() {
     _sensors = new SensorList();
 
     if (!Settings::shared()->isConfigured()) {
-        SettingsMenu settingsMenu;
-
-        settingsMenu.run();
+        
         Settings::shared()->setConfigured(true);
     }
 

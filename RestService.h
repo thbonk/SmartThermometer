@@ -17,8 +17,6 @@ limitations under the License.
 #ifndef __RESTSERVICE_H__
 #define __RESTSERVICE_H__
 
-#include <WiFi.h>
-#include <ESPmDNS.h>
 #include <WebServer.h>
 #include "SensorList.h"
 

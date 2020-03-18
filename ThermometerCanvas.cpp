@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include <HTTPClient.h>
 #include <M5ez.h>
 #include "Application.h"
 #include "Settings.h"
-#include "SettingsMenu.h"
 #include "ThermometerCanvas.h"
 
 #define BTN_PREVIOUS    "up"
@@ -59,9 +59,7 @@ void ThermometerCanvas::loop(){
     String btnPressed = ez.buttons.poll();
 
     if (btnPressed == BTN_SETTINGS) {
-        SettingsMenu settingsMenu;
-
-        settingsMenu.run();
+        ez.settings.menu();
         draw();
     } else if (btnPressed == BTN_PREVIOUS) {
         showPreviousSensor();
@@ -122,5 +120,56 @@ void ThermometerCanvas::showSensor() {
     ez.canvas.pos((ez.canvas.width() - _humidityTextWidth) / 2, 135);
     ez.canvas.print(buffer);
 
+    uploadMeasurements();
+
     Serial.println(" ---------- showSensor() ----------");
+}
+
+void ThermometerCanvas::uploadMeasurements() {
+  xTaskCreatePinnedToCore(
+        [](void *params) {      /* Function to implement the task */
+          Serial.println(" ---------- uploadMeasurements() TASK ----------");
+          
+          if (WiFi.status() == WL_CONNECTED) {
+            Serial.println("WiFi is connected");
+
+            SensorList          * sensors = Application::shared()->getSensors();
+            HTTPClient          httpClient;
+
+            for (int i = 0; i < sensors->count(); i++) {
+              struct SensorValues sensorValues = sensors->read(i);
+              String              temperatureUrl = sensors->getTemperatureUrl(i);
+              String              humidityUrl = sensors->getHumidityUrl(i);
+
+              if (temperatureUrl.length() > 0) {
+                temperatureUrl.replace("${temperature}", String(sensorValues.temperature));
+
+                httpClient.begin(temperatureUrl);
+                int status = httpClient.POST("");
+                httpClient.end();
+
+                Serial.printf("Posted to URL %s, HTTP Status = %d", temperatureUrl.c_str(), status);
+              }
+
+              if (humidityUrl.length() > 0) {
+                humidityUrl.replace("${humidity}", String(sensorValues.humidity));
+                
+                httpClient.begin(humidityUrl);
+                int status = httpClient.POST("");
+                httpClient.end();
+
+                Serial.printf("Posted to URL %s, HTTP Status = %d", humidityUrl.c_str(), status);
+              }
+            }
+          }
+
+          Serial.println(" ---------- uploadMeasurements() TASK ----------");
+          vTaskDelete(NULL);
+        },
+        "uploadMeasurements",   /* Name of the task */
+        4096,                   /* Stack size in words */
+        NULL,                   /* Task input parameter */
+        3,                      /* Priority of the task */
+        NULL,                   /* Task handle. */
+        0);                     /* Core where the task should run */
 }

@@ -17,7 +17,6 @@ limitations under the License.
 #include <M5Stack.h>
 #include <WiFi.h>
 #include <ESPmDNS.h>
-#include <WiFiClient.h>
 #include <ArduinoJson.h>
 #include "Application.h"
 #include "Constants.h"

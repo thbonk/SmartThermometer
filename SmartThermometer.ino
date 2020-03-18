@@ -18,8 +18,8 @@ limitations under the License.
 #include "Settings.h"
 #include "RestService.h"
 
-Application app;
 Settings settings;
+Application app;
 RestService restService;
 
 //

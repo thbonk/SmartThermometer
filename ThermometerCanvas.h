@@ -17,7 +17,6 @@ limitations under the License.
 #ifndef __THERMOMETERCANVAS_H__
 #define __THERMOMETERCANVAS_H__
 
-#include <M5Stack.h>
 #include "Canvas.h"
 
 class ThermometerCanvas: public Canvas {
@@ -37,6 +36,7 @@ class ThermometerCanvas: public Canvas {
         void showPreviousSensor();
         void showNextSensor();
         void showSensor();
+        void uploadMeasurements();
 
         unsigned long   _nextDrawTime;
         int16_t         _currentSensor;

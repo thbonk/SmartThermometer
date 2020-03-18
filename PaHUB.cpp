@@ -1,5 +1,4 @@
 #include <Wire.h>
-
 #include "PaHUB.h"
 
 PaHUB::PaHUB() {

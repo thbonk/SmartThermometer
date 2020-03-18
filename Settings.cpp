@@ -20,9 +20,13 @@ limitations under the License.
 #define APP_KEY_NAME        "smrt-thrm"
 
 // Constants for accessing the preferences
-#define PREF_IS_CONFIGURED        "isConfigured"
-#define PREF_UI_UPDATE_FREQUENCY  "uiUpdFreq"
-#define PREF_HOSTNAME             "hostname"
+#define PREF_IS_CONFIGURED            "isConfigured"
+#define PREF_UI_UPDATE_FREQUENCY      "uiUpdFreq"
+#define PREF_HOSTNAME                 "hostname"
+#define PREF_CONFIG_SENSOR_NUM        "cfgSensorNum"
+#define PREF_CONFIG_SENSOR_NAME       "sensorName."
+#define PREF_CONFIG_SENSOR_TEMP_URL   "sensorTempUrl."
+#define PREF_CONFIG_SENSOR_HUMID_URL  "sensorHumidUrl."
 
 Settings * Settings::_shared = NULL;
 
@@ -174,5 +178,79 @@ void Settings::setUiUpdateFrequency(uint8_t frequency) {
   *_updateFreqency = frequency;
   _preferences.begin(APP_KEY_NAME, false);
   _preferences.putUChar(PREF_UI_UPDATE_FREQUENCY, frequency);
+  _preferences.end();
+}
+
+int16_t Settings::getConfiguredSensors() {
+  _preferences.begin(APP_KEY_NAME, true);
+  int16_t result = _preferences.getUShort(PREF_CONFIG_SENSOR_NUM, 0);
+  _preferences.end();
+
+  return result;
+}
+
+void Settings::setConfiguredSensors(int16_t num) {
+  _preferences.begin(APP_KEY_NAME, false);
+  _preferences.putUShort(PREF_CONFIG_SENSOR_NUM, num);
+  _preferences.end();
+}
+
+String Settings::getSensorName(int16_t channel) {
+  _preferences.begin(APP_KEY_NAME, true);
+  String result = 
+    _preferences
+      .getString(
+        (String(PREF_CONFIG_SENSOR_NAME) + String(channel)).c_str(), 
+        String("Sensor ") + String(channel + 1));
+  _preferences.end();
+
+  return result;
+}
+
+void Settings::setSensorName(int16_t channel, String name) {
+  _preferences.begin(APP_KEY_NAME, false);
+  _preferences.putString((String(PREF_CONFIG_SENSOR_NAME) + String(channel)).c_str(), name);
+  _preferences.end();
+}
+
+String Settings::getSensorTemperatureUrl(int16_t channel)  {
+  _preferences.begin(APP_KEY_NAME, true);
+  String result = _preferences.getString((String(PREF_CONFIG_SENSOR_TEMP_URL) + String(channel)).c_str(), "");
+  _preferences.end();
+
+  return result;
+}
+
+void Settings::setSensorTemperatureUrl(int16_t channel, String url) {
+  _preferences.begin(APP_KEY_NAME, false);
+  _preferences.putString((String(PREF_CONFIG_SENSOR_TEMP_URL) + String(channel)).c_str(), url);
+  _preferences.end();
+}
+
+String Settings::getSensorHumidityUrl(int16_t channel) {
+  _preferences.begin(APP_KEY_NAME, true);
+  String result = _preferences.getString((String(PREF_CONFIG_SENSOR_HUMID_URL) + String(channel)).c_str(), "");
+  _preferences.end();
+
+  return result;
+}
+
+void Settings::setSensorHumidityUrl(int16_t channel, String url) {
+  _preferences.begin(APP_KEY_NAME, false);
+  _preferences.putString((String(PREF_CONFIG_SENSOR_HUMID_URL) + String(channel)).c_str(), url);
+  _preferences.end();
+}
+
+void Settings::removeSensorConfigurations() {
+  _preferences.begin(APP_KEY_NAME, false);
+  
+  _preferences.remove(PREF_CONFIG_SENSOR_NUM);
+
+  for (int16_t c = 0; c < 6; c++) {
+    _preferences.remove((String(PREF_CONFIG_SENSOR_NAME) + String(c)).c_str());
+    _preferences.remove((String(PREF_CONFIG_SENSOR_TEMP_URL) + String(c)).c_str());
+    _preferences.remove((String(PREF_CONFIG_SENSOR_HUMID_URL) + String(c)).c_str());
+  }
+
   _preferences.end();
 }

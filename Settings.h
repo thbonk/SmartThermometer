@@ -43,6 +43,20 @@ class Settings {
     uint8_t getUiUpdateFrequency();
     void    setUiUpdateFrequency(uint8_t frequency);
 
+    int16_t getConfiguredSensors();
+    void setConfiguredSensors(int16_t num);
+
+    String getSensorName(int16_t channel);
+    void setSensorName(int16_t channel, String name);
+
+    String getSensorTemperatureUrl(int16_t channel);
+    void setSensorTemperatureUrl(int16_t channel, String url);
+
+    String getSensorHumidityUrl(int16_t channel);
+    void setSensorHumidityUrl(int16_t channel, String url);
+
+    void removeSensorConfigurations();
+
   private:
     static Settings * _shared;
 

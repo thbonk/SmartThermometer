@@ -18,6 +18,7 @@ limitations under the License.
 #define __SENSORLIST_H__
 
 #include <vector>
+#include <ArduinoJson.h>
 #include "PaHUB.h"
 #include "DHT12.h"
 
@@ -33,16 +34,23 @@ class Sensor {
         ~Sensor();
 
     protected:
-        Sensor(PaHUB * pahub, uint8_t channel, char * name);
+        Sensor(PaHUB * pahub, uint8_t channel, const char * name);
 
         struct SensorValues read();
+        uint8_t      getChannel() { return _channel; }
         const char * getName();
         void         setName(const char * name);
+        const char * getTemperatureUrl();
+        void         setTemperatureUrl(const char * url);
+        const char * getHumidityUrl();
+        void         setHumidityUrl(const char * url);
 
     private:
         PaHUB   * _pahub;
         uint8_t   _channel;
         char    * _name;
+        char    * _temperatureUrl;
+        char    * _humidityUrl;
         DHT12     _dht12;
 };
 
@@ -55,7 +63,16 @@ class SensorList {
 
         struct SensorValues read(int sensorNum);
 
-        const char * getSensorName(int sensorNum);
+        String getSensorName(int sensorNum);
+        void setSensorName(int sensorNum, String name);
+
+        String getTemperatureUrl(int sensorNum);
+        void setTemperatureUrl(int sensorNum, String url);
+
+        String getHumidityUrl(int sensorNum);
+        void setHumidityUrl(int sensorNum, String url);
+
+        void saveSettings();
 
     private:
         void     probeSensors();

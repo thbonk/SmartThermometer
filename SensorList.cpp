@@ -15,17 +15,22 @@ limitations under the License.
 */
 
 #include "SensorList.h"
+#include "Settings.h"
 
 #define PaHub_I2C_ADDRESS  0x70
 #define ENV_I2C_ADDRESS    0x5C
 
-Sensor::Sensor(PaHUB * pahub, uint8_t channel, char * name)
-    : _pahub(pahub), _channel(channel), _name(NULL), _dht12() {
+Sensor::Sensor(PaHUB * pahub, uint8_t channel, const char * name)
+    : _pahub(pahub), _channel(channel), _name(NULL), _dht12()
+    , _temperatureUrl(NULL), _humidityUrl(NULL) {
 
     if (name) {
         _name = (char *)malloc(strlen(name) + 1);
         strcpy(_name, name);
     }
+
+    setTemperatureUrl("");
+    setHumidityUrl("");
 }
 
 Sensor::~Sensor() {
@@ -57,6 +62,31 @@ void Sensor::setName(const char * name) {
     strcpy(_name, name);
 }
 
+const char * Sensor::getTemperatureUrl() {
+    return _temperatureUrl;
+}
+void Sensor::setTemperatureUrl(const char * url) {
+    if (_temperatureUrl) {
+        free(_temperatureUrl);
+    }
+
+    _temperatureUrl = (char *)malloc(strlen(url) + 1);
+    strcpy(_temperatureUrl, url);
+}
+
+const char * Sensor::getHumidityUrl() {
+    return _humidityUrl;
+}
+
+void Sensor::setHumidityUrl(const char * url) {
+    if (_humidityUrl) {
+        free(_humidityUrl);
+    }
+
+    _humidityUrl = (char *)malloc(strlen(url) + 1);
+    strcpy(_humidityUrl, url);
+}
+
 SensorList::SensorList() : _pahub(PaHub_I2C_ADDRESS), _sensors() {
     probeSensors();
 }
@@ -79,12 +109,46 @@ struct SensorValues SensorList::read(int sensorNum) {
     return getSensor(sensorNum)->read();
 }
 
-const char * SensorList::getSensorName(int sensorNum) {
-    return getSensor(sensorNum)->getName();
+String SensorList::getSensorName(int sensorNum) {
+    return String(getSensor(sensorNum)->getName());
+}
+
+void SensorList::setSensorName(int sensorNum, String name) {
+    getSensor(sensorNum)->setName(name.c_str());
+}
+
+String SensorList::getTemperatureUrl(int sensorNum) {
+    return String(getSensor(sensorNum)->getTemperatureUrl());
+}
+
+void SensorList::setTemperatureUrl(int sensorNum, String url) {
+    getSensor(sensorNum)->setTemperatureUrl(url.c_str());
+}
+
+String SensorList::getHumidityUrl(int sensorNum) {
+    return String(getSensor(sensorNum)->getHumidityUrl());
+}
+
+void SensorList::setHumidityUrl(int sensorNum, String url) {
+    getSensor(sensorNum)->setHumidityUrl(url.c_str());
 }
 
 Sensor * SensorList::getSensor(int index) {
     return _sensors.at(index);
+}
+
+void SensorList::saveSettings() {
+    Settings::shared()->removeSensorConfigurations();
+
+    Settings::shared()->setConfiguredSensors(count());
+
+    for (int i = 0; i < count(); i++) {
+        Sensor * sensor = getSensor(i);
+
+        Settings::shared()->setSensorName(sensor->getChannel(), getSensorName(i));
+        Settings::shared()->setSensorTemperatureUrl(sensor->getChannel(), String(sensor->getTemperatureUrl()));
+        Settings::shared()->setSensorHumidityUrl(sensor->getChannel(), String(sensor->getHumidityUrl()));
+    }
 }
 
 void SensorList::probeSensors() {
@@ -98,10 +162,12 @@ void SensorList::probeSensors() {
         Serial.printf("Probing sensor at channel %d, error = %d\n", channel, error);
 
         if (error == 0) {
-            char name[32];
+            Sensor * sensor = new Sensor(&_pahub, channel, Settings::shared()->getSensorName(channel).c_str());
 
-            sprintf(name, "Sensor %d", channel + 1);
-            _sensors.push_back(new Sensor(&_pahub, channel, name));
+            sensor->setTemperatureUrl(Settings::shared()->getSensorTemperatureUrl(channel).c_str());
+            sensor->setHumidityUrl(Settings::shared()->getSensorHumidityUrl(channel).c_str());
+
+            _sensors.push_back(sensor);
         }
     }
 }
