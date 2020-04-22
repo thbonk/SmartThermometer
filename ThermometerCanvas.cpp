@@ -33,7 +33,7 @@ int ThermometerCanvas::_temperatureTextWidth = textWidth("99.9'C");
 int ThermometerCanvas::_humidityTextWidth    = textWidth("100%%");
 
 ThermometerCanvas::ThermometerCanvas() 
-    : Canvas(), _nextDrawTime(0), _currentSensor(-1) {
+    : Canvas(), _nextDrawTime(0), _nextUploadTime(0), _currentSensor(-1) {
 
     Serial.print("_temperatureTextWidth = "); Serial.println(_temperatureTextWidth);
     Serial.print("_humidityTextWidth = "); Serial.println(_humidityTextWidth);
@@ -65,6 +65,11 @@ void ThermometerCanvas::loop(){
         showPreviousSensor();
     } else if (btnPressed == BTN_NEXT) {
         showNextSensor();
+    }
+
+    if (_nextUploadTime < millis()) {
+        _nextUploadTime = millis() + 30000;
+        uploadMeasurements();
     }
 }
 
@@ -120,8 +125,6 @@ void ThermometerCanvas::showSensor() {
     ez.canvas.pos((ez.canvas.width() - _humidityTextWidth) / 2, 135);
     ez.canvas.print(buffer);
 
-    uploadMeasurements();
-
     Serial.println(" ---------- showSensor() ----------");
 }
 
@@ -145,7 +148,7 @@ void ThermometerCanvas::uploadMeasurements() {
                 temperatureUrl.replace("${temperature}", String(sensorValues.temperature));
 
                 httpClient.begin(temperatureUrl);
-                int status = httpClient.POST("");
+                int status = httpClient.GET();
                 httpClient.end();
 
                 Serial.printf("Posted to URL %s, HTTP Status = %d", temperatureUrl.c_str(), status);
@@ -155,7 +158,7 @@ void ThermometerCanvas::uploadMeasurements() {
                 humidityUrl.replace("${humidity}", String(sensorValues.humidity));
                 
                 httpClient.begin(humidityUrl);
-                int status = httpClient.POST("");
+                int status = httpClient.GET();
                 httpClient.end();
 
                 Serial.printf("Posted to URL %s, HTTP Status = %d", humidityUrl.c_str(), status);

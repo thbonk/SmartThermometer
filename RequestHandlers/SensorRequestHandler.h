@@ -106,6 +106,9 @@ class SensorRequestHandler : public PathArgsRequestHandler {
             struct SensorValues values = Application::shared()->getSensors()->read(sensor);
 
             doc["name"] = Application::shared()->getSensors()->getSensorName(sensor);
+            doc["channel"] = Application::shared()->getSensors()->getChannel(sensor);
+            doc["temperatureUrl"] = Application::shared()->getSensors()->getTemperatureUrl(sensor);
+            doc["humidityUrl"] = Application::shared()->getSensors()->getHumidityUrl(sensor);
             doc["temperature"] = values.temperature;
             doc["humidity"] = values.humidity;
 

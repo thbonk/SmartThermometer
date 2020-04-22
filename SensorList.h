@@ -63,6 +63,8 @@ class SensorList {
 
         struct SensorValues read(int sensorNum);
 
+        uint8_t getChannel(int sensorNum);
+
         String getSensorName(int sensorNum);
         void setSensorName(int sensorNum, String name);
 

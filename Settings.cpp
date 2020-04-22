@@ -26,7 +26,7 @@ limitations under the License.
 #define PREF_CONFIG_SENSOR_NUM        "cfgSensorNum"
 #define PREF_CONFIG_SENSOR_NAME       "sensorName."
 #define PREF_CONFIG_SENSOR_TEMP_URL   "sensorTempUrl."
-#define PREF_CONFIG_SENSOR_HUMID_URL  "sensorHumidUrl."
+#define PREF_CONFIG_SENSOR_HUMID_URL  "sensHumidUrl."
 
 Settings * Settings::_shared = NULL;
 

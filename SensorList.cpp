@@ -109,6 +109,10 @@ struct SensorValues SensorList::read(int sensorNum) {
     return getSensor(sensorNum)->read();
 }
 
+uint8_t SensorList::getChannel(int sensorNum) {
+    return getSensor(sensorNum)->getChannel();
+}
+
 String SensorList::getSensorName(int sensorNum) {
     return String(getSensor(sensorNum)->getName());
 }

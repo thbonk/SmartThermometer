@@ -39,6 +39,7 @@ class ThermometerCanvas: public Canvas {
         void uploadMeasurements();
 
         unsigned long   _nextDrawTime;
+        unsigned long   _nextUploadTime;
         int16_t         _currentSensor;
 
         static int      _temperatureTextWidth;
